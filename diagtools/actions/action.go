@@ -210,6 +210,8 @@ func (action *Action) fileName() string {
 func (action *Action) getDiagDate(s string, t time.Time) string {
 	s = strings.ReplaceAll(s, ".hprof", "")
 	s = strings.ReplaceAll(s, ".zip", "")
+	s = strings.ReplaceAll(s, constants.GCLogSuffix, "")
+	s = strings.ReplaceAll(s, constants.ThreadDumpSuffix, "")
 	if tt, err := time.Parse(constants.DumpFileTimestampLayout, s); err == nil {
 		t = tt
 	}

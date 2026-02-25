@@ -115,6 +115,28 @@ func TestIsTopDumpEnabled(t *testing.T) {
 	assert.Equal(t, "NC_DIAGNOSTIC_TOP_ENABLED", NcDiagTopEnabled)
 }
 
+func TestIsGCLogEnabled(t *testing.T) {
+	os.Unsetenv(NcDiagGCLogEnabled)
+	deleteFile(NcDiagGCLogEnabled)
+	assert.False(t, IsGCLogEnabled(testCtx)) // disabled by default
+
+	os.Setenv(NcDiagGCLogEnabled, "true")
+	assert.True(t, IsGCLogEnabled(testCtx))
+
+	os.Setenv(NcDiagGCLogEnabled, "false")
+	assert.False(t, IsGCLogEnabled(testCtx))
+
+	saveFile(NcDiagGCLogEnabled, []byte("true"))
+	os.Unsetenv(NcDiagGCLogEnabled)
+	assert.True(t, IsGCLogEnabled(testCtx))
+
+	saveFile(NcDiagGCLogEnabled, []byte("false"))
+	assert.False(t, IsGCLogEnabled(testCtx))
+
+	deleteFile(NcDiagGCLogEnabled)
+	assert.Equal(t, "ESC_HARVEST_GCLOG", NcDiagGCLogEnabled)
+}
+
 func TestIsZookeeperEnabled(t *testing.T) {
 	assert.False(t, IsZookeeperEnabled()) // disabled by default
 

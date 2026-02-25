@@ -171,6 +171,20 @@ func IsThreadDumpEnabled(ctx context.Context) bool {
 	return getProperty(ctx, NcDiagThreadDumpEnabled)
 }
 
+// IsGCLogEnabled is GC log harvest enabled? (collect from JVM -Xloggc/-Xlog:file= and upload to diagnostic center). DISABLED by default.
+func IsGCLogEnabled(ctx context.Context) bool {
+	return getProperty(ctx, NcDiagGCLogEnabled)
+	// if fileVal, fileErr := readFullFile(propFile(NcDiagGCLogEnabled)); fileErr == nil {
+	// 	if v, parseErr := strconv.ParseBool(strings.TrimSpace(string(fileVal))); parseErr == nil {
+	// 		return v
+	// 	}
+	// }
+	// if val, err := strconv.ParseBool(os.Getenv(NcDiagGCLogEnabled)); err == nil {
+	// 	return val
+	// }
+	// return false
+}
+
 // IsZookeeperEnabled is integration with Zookeeper enabled? (to load Profiler Agent configuration for the service)
 func IsZookeeperEnabled() bool {
 	if val, err := strconv.ParseBool(os.Getenv(ZkEnabled)); err == nil {

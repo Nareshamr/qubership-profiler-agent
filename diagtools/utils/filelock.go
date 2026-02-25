@@ -14,6 +14,10 @@ import (
 const _lockPostfix = ".diagnostic.exclusivelock"
 
 func Flock(filename string) (file *os.File, err error) {
+	dir := filepath.Dir(filename)
+	if err = os.MkdirAll(dir, 0755); err != nil {
+		return nil, fmt.Errorf("create lock dir %s error: %v", dir, err)
+	}
 	file, err = os.OpenFile(filename, os.O_CREATE|os.O_RDWR, 0600)
 	if err != nil {
 		return nil, fmt.Errorf("open file %s error: %v", filename, err)

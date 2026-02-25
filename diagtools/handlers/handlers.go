@@ -69,6 +69,10 @@ func HandleDumpCmd(ctx context.Context) (err error) {
 		err = errors.Join(err, HandleTopCmd(ctx))
 	}
 
+	if constants.IsGCLogEnabled(ctx) {
+		err = errors.Join(err, HandleGCLogsCmd(ctx))
+	}
+
 	return
 }
 
@@ -77,6 +81,15 @@ func HandleThreadDumpCmd(ctx context.Context) (err error) {
 	if err == nil {
 		log.Infof(ctx, "start creating a thread dump for PID #%s", action.Pid)
 		err = action.GetThreadDump(ctx)
+	}
+	return
+}
+
+func HandleGCLogsCmd(ctx context.Context) (err error) {
+	action, err := actions2.CreateGCLogsAction(ctx)
+	if err == nil {
+		log.Infof(ctx, "start collecting GC logs for PID #%s", action.Pid)
+		err = action.GetGCLogs(ctx)
 	}
 	return
 }
@@ -133,8 +146,9 @@ func HandleScheduleCmd(baseCtx context.Context, logPath string) (err error) {
 			err = utils.InLock(ctx, func(ctx context.Context) error {
 				dumpFolder := constants.DumpFolder()
 				filePattern := filepath.Join(dumpFolder, constants.DumpFilePattern)
+				gclogPattern := filepath.Join(dumpFolder, constants.GCLogFilePattern)
 
-				err = HandleScanCmd(ctx, []string{filePattern})
+				err = HandleScanCmd(ctx, []string{filePattern, gclogPattern})
 				if err != nil {
 					log.Error(ctx, err, "Scan request failed")
 				} else {

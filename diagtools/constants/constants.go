@@ -44,8 +44,10 @@ const (
 	CustomConfigXmlFilePath = "/config/default/00-custom-config.xml"
 	DumpFileSuffix          = ".hprof"
 	DumpFilePattern         = "*.hprof*"
+	GCLogFilePattern        = "*.gclog"
 	ThreadDumpSuffix        = ".td.txt"
 	TopDumpSuffix           = ".top.txt"
+	GCLogSuffix             = ".gclog"
 	UserSecret              = "/etc/secret/username"
 	PswdSecret              = "/etc/secret/password"
 )
